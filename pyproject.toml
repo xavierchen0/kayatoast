@@ -1,0 +1,9 @@
+[tool.ruff.format]
+# to disable automatic code formatting for a specific section:
+#   indicate with # fmt: off and then # fmt: on
+#   e.g.
+#   # fmt: off
+#   do not code format this line
+#   # fmt: on
+#   code format this line onwards
+docstring-code-format = true
