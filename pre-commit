@@ -3,12 +3,14 @@
 files=$(git diff --cached --name-only)
 for file in $files; do
   if [[ $file == *.py ]]; then
-    echo -e "\x1b[38;2;119;221;119m[Info]\x1b[0m Running black formatter on $file"
+    if ! git diff --quiet "$file"; then
+      echo -e "\x1b[38;2;255;100;100m[Skip]\x1b[0m $file has unstaged changes. Skipping."
+      continue
+    fi
+    echo -e "\x1b[38;2;119;221;119m[Info]\x1b[0m Formatting $file"
     black "$file"
-    echo -e "\x1b[38;2;119;221;119m[Info]\x1b[0m Running isort formatter on $file"
     isort "$file"
     git add "$file"
   fi
 done
-
 commit_msg=$(cat $1)
