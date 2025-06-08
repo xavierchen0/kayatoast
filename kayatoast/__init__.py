@@ -11,7 +11,7 @@ load_dotenv()
 
 
 def create_app() -> Flask:
-    server = Flask(__name__, instance_relative_config=True)
+    server = Flask(__name__, instance_relative_config=True, static_url_path="/assets")
 
     # Configure Flask server
     server.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
@@ -21,10 +21,19 @@ def create_app() -> Flask:
     dictConfig(d)
 
     # Initalise db
-    db.init_app(server)
+    # db.init_app(server)
 
     with server.app_context():
         # Create tables
-        db.create_all()
+        # db.create_all()
+
+        # Import Dash app
+        from .init_campaign import init_campaign
+
+        server = init_campaign(server)
+
+    @server.route("/")
+    def hello():
+        return "Hello World"
 
     return server
